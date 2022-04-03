@@ -1,0 +1,78 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "keyvaultname": {
+      "type": "String"
+    },
+    "enabledForDeployment": {
+      "type": "bool",
+      "allowedValues": [ true, false ]
+    },
+    "enabledForDiskEncryption": {
+      "type": "bool",
+      "allowedValues": [ true, false ]
+    },
+    "enabledForTemplateDeployment": {
+      "type": "bool",
+      "allowedValues": [ true, false ]
+    },
+    "enableSoftDelete": {
+      "type": "bool"
+    },
+    "softDeleteRetentionInDays": {
+      "type": "int"
+    },
+    "KeysPermission": {
+      "type": "array"
+    },
+    "SecretPermission": {
+      "type": "array"
+    },
+    "skuName": {
+      "type": "string"
+    },
+    "username": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[parameters('keyvaultname')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "sku": {
+          "family": "A",
+          "name": "[parameters('skuName')]"
+        },
+        "tenantId": "df2972cd-f48a-4c28-baa3-3d228857e286",
+        "accessPolicies": [
+          {
+            "tenantId": "df2972cd-f48a-4c28-baa3-3d228857e286",
+            "objectId": "b24f289f-7f9d-4454-89be-c88279d045fe",
+            "permissions": {
+              "keys": "[parameters('KeysPermission')]",
+              "secrets": "[parameters('SecretPermission')]"
+            }
+          }
+        ],
+        "enabledForDeployment": "[parameters('enabledForDeployment')]",
+        "enabledForDiskEncryption": "[parameters('enabledForDiskEncryption')]",
+        "enabledForTemplateDeployment": "[parameters('enabledForTemplateDeployment')]",
+        "enableSoftDelete": "[parameters('enableSoftDelete')]",
+        "softDeleteRetentionInDays": "[parameters('softDeleteRetentionInDays')]",
+        "enableRbacAuthorization": false,
+        "vaultUri": "[concat('https://', parameters('keyvaultname'), '.vault.azure.net/')]",
+        "provisioningState": "Succeeded",
+        "publicNetworkAccess": "Enabled"
+      }
+    }   
+    
+  ]
+}
