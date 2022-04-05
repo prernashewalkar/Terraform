@@ -1,0 +1,32 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- master
+
+pool:
+  name: : 'Default'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: Terraform@2
+  inputs:
+    TemplatePath: '"C:\Users\sande\Desktop\cjc\vscode\prernavm.tf"'
+    Arguments: 'Plan'
+    PlanPath: 'Terraform/prernavm.tf'
+    InstallTerraform: true
+    Version: '3.0.0'
+    UseAzureSub: true
+    ConnectedServiceNameSelector: 'ConnectedServiceNameARM'
+    ConnectedServiceNameARM: 'Free Trial (4abe0d85-2544-4982-8eff-0de8b67e2b5c)'
+    ManageState: true
+    SpecifyStorageAccount: true
+    StorageAccountResourceGroup: 'example-resources'
+    StorageAccountRM: 'csg10032001e7eeb408'
+    StorageContainerName: 'pnk'
